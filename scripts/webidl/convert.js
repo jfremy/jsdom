@@ -46,4 +46,4 @@ function onlyIDL(filePath) {
   return path.extname(filePath) === ".idl";
 }
 
-doConversion("lib/jsdom/living/generated/events").done();
+doConversion("lib/jsdom/living/events").done();
