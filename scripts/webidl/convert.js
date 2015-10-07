@@ -38,7 +38,7 @@ function doConversion(inputPath) {
   .then(readConcatenatedSource)
   .then(src => {
     const folder = isDir ? inputPath : path.dirname(inputPath);
-    generateClasses(src, folder, ".", UTIL_PATH);
+    generateClasses(src, path.relative(outputDir, folder));
   });
 }
 
@@ -46,5 +46,5 @@ function onlyIDL(filePath) {
   return path.extname(filePath) === ".idl";
 }
 
-doConversion("lib/jsdom/living/generated/events").done();
+doConversion("lib/jsdom/living/events").done();
 doConversion("lib/jsdom/living/generated/attributes").done();
