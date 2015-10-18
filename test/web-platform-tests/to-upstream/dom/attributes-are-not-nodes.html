@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Attributes are not Nodes and should not be accepted where they are</title>
+<link rel=help href="https://dom.spec.whatwg.org/#dom-core-changes">
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+
+<script>
+"use strict";
+
+test(() => {
+
+  const parent = document.createElement("p");
+  parent.appendChild(document.createElement("span"));
+
+  const attribute = document.createAttribute("newattribute");
+  assert_throws(new TypeError(), () => {
+    parent.replaceChild(attribute, parent.firstChild);
+  });
+
+}, "trying to replace a child with an attribute should fail");
+
+</script>
