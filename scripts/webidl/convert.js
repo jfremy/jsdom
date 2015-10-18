@@ -47,4 +47,4 @@ function onlyIDL(filePath) {
 }
 
 doConversion("lib/jsdom/living/events").done();
-doConversion("lib/jsdom/living/generated/attributes").done();
+doConversion("lib/jsdom/living/attributes").done();
