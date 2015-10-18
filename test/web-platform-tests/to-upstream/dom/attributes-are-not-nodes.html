@@ -10,6 +10,15 @@
 
 test(() => {
 
+  const attribute = document.createAttribute("newattribute");
+
+  assert_false('nodeType' in attribute);
+  assert_false('nodeType' in Attr.prototype);
+
+}, 'Attrs do not have nodeType properties');
+
+test(() => {
+
   const parent = document.createElement("p");
   parent.appendChild(document.createElement("span"));
 
@@ -18,6 +27,18 @@ test(() => {
     parent.replaceChild(attribute, parent.firstChild);
   });
 
-}, "trying to replace a child with an attribute should fail");
+}, "replaceChild with an attribute should fail");
+
+test(() => {
+
+  const parent = document.createElement("p");
+  parent.appendChild(document.createElement("span"));
+
+  const attribute = document.createAttribute("newattribute");
+  assert_throws(new TypeError(), () => {
+    parent.insertBefore(attribute, parent.firstChild);
+  });
+
+}, "insertBefore with an attribute should fail");
 
 </script>
