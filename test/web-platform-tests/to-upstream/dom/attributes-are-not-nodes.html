@@ -12,10 +12,25 @@ test(() => {
 
   const attribute = document.createAttribute("newattribute");
 
-  assert_false('nodeType' in attribute);
-  assert_false('nodeType' in Attr.prototype);
+  const notOnAttrs = ['nodeType', 'appendChild', 'normalize'];
+
+  for (const prop of notOnAttrs) {
+    assert_false(prop in attribute, `${prop} should not exist on attribute instances`);
+    assert_false(prop in Attr.prototype, `${prop} should not exist on Attr.prototype`);
+  }
 
 }, 'Attrs do not have nodeType properties');
+
+test(() => {
+
+  const parent = document.createElement("p");
+
+  const attribute = document.createAttribute("newattribute");
+  assert_throws(new TypeError(), () => {
+    parent.appendChild(attribute);
+  });
+
+}, "appendChild with an attribute should fail");
 
 test(() => {
 

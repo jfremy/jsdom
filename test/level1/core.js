@@ -4547,59 +4547,6 @@ exports.tests = {
 
   /**
    *
-   Sets Attr.value on an attribute that should contain multiple child nodes.
-
-   * @author Curt Arnold
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-221662474
-   */
-  hc_attrsetvalue2: function(test) {
-    var success;
-    var doc;
-    var acronymList;
-    var testNode;
-    var attributes;
-    var titleAttr;
-    var value;
-    var textNode;
-    var retval;
-    var firstChild;
-    var otherChild;
-
-    doc = hc_staff.hc_staff();
-    acronymList = doc.getElementsByTagName("acronym");
-    testNode = acronymList.item(3);
-    attributes = testNode.attributes;
-
-    titleAttr = attributes.getNamedItem("title");
-    textNode = doc.createTextNode("terday");
-    retval = titleAttr.appendChild(textNode);
-    firstChild = titleAttr.firstChild;
-
-    test.notEqual(firstChild, null, 'attrChildNotNull');
-    titleAttr.value = "Tomorrow";
-
-    firstChild.nodeValue = "impl reused node";
-
-    value = titleAttr.value;
-
-    test.equal(value, "Tomorrow", 'attrValue');
-    value = titleAttr.nodeValue;
-
-    test.equal(value, "Tomorrow", 'attrNodeValue');
-    firstChild = titleAttr.lastChild;
-
-    value = firstChild.nodeValue;
-
-    test.equal(value, "Tomorrow", 'firstChildValue');
-    otherChild = firstChild.nextSibling;
-
-    test.equal(otherChild, null, 'nextSiblingIsNull');
-
-    test.done();
-  },
-
-  /**
-   *
    The "getSpecified()" method for an Attr node should
    be set to true if the attribute was explicitly given
    a value.
@@ -7226,50 +7173,6 @@ exports.tests = {
 
   /**
    *
-   Add an empty text node to an existing attribute node, normalize the containing element
-   and check that the attribute node has eliminated the empty text.
-
-   * @author Curt Arnold
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-162CF083
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=482
-   */
-  hc_elementnormalize2: function(test) {
-    var success;
-    var doc;
-    var root;
-    var elementList;
-    var element;
-    var firstChild;
-    var secondChild;
-    var childValue;
-    var emptyText;
-    var attrNode;
-    var retval;
-
-    doc = hc_staff.hc_staff();
-    root = doc.documentElement;
-
-    emptyText = doc.createTextNode("");
-    elementList = root.getElementsByTagName("acronym");
-    element = elementList.item(0);
-    attrNode = element.getAttributeNode("title");
-    retval = attrNode.appendChild(emptyText);
-    element.normalize();
-    attrNode = element.getAttributeNode("title");
-    firstChild = attrNode.firstChild;
-
-    childValue = firstChild.nodeValue;
-
-    test.equal(childValue, "Yes", 'firstChild');
-    secondChild = firstChild.nextSibling;
-
-    test.equal(secondChild, null, 'secondChildNull');
-
-    test.done();
-  },
-
-  /**
-   *
    The "removeAttributeNode(oldAttr)" method raises a
    NOT_FOUND_ERR DOMException if the "oldAttr" attribute
    is not an attribute of the element.
@@ -7815,7 +7718,6 @@ exports.tests = {
     attributes = testEmployee.attributes;
 
     streetAttr = attributes.getNamedItem("class");
-    test.equal(streetAttr.nodeType, 2, 'typeAssert');
     attrName = streetAttr.name;
 
     test.equal(attrName, "class", 'attribute nodeName');
@@ -8273,51 +8175,6 @@ exports.tests = {
   /**
    *
    The "appendChild(newChild)" method raises a
-   HIERARCHY_REQUEST_ERR DOMException if this node is of
-   a type that does not allow children of the type "newChild"
-   to be inserted.
-
-   Retrieve the root node and attempt to append a newly
-   created Attr node.   An Element node cannot have children
-   of the "Attr" type, therefore the desired exception
-   should be raised.
-
-   * @author Curt Arnold
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-258A00AF')/constant[@name='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-184E7107
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-184E7107')/raises/exception[@name='DOMException']/descr/p[substring-before(.,':')='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-184E7107
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=249
-   */
-  hc_nodeappendchildinvalidnodetype: function(test) {
-    var success;
-    var doc;
-    var rootNode;
-    var newChild;
-    var appendedChild;
-
-    doc = hc_staff.hc_staff();
-    rootNode = doc.documentElement;
-
-    newChild = doc.createAttribute("newAttribute");
-
-    {
-      success = false;
-      try {
-        appendedChild = rootNode.appendChild(newChild);
-      }
-      catch(ex) {
-        success = (typeof(ex.code) != 'undefined' && ex.code == 3);
-      }
-      test.ok(success, 'throw_HIERARCHY_REQUEST_ERR');
-    }
-
-    test.done();
-  },
-
-  /**
-   *
-   The "appendChild(newChild)" method raises a
    WRONG_DOCUMENT_ERR DOMException if the "newChild" was
    created from a different document than the one that
    created this node.
@@ -8470,44 +8327,6 @@ exports.tests = {
     attrName = addrAttr.name;
 
     test.equal(attrName, "title", 'attribute nodeName');
-
-    test.done();
-  },
-
-  /**
-   *
-
-   The "getNodeType()" method for an Attribute Node
-
-   returns the constant value 2.
-
-
-
-   Retrieve the first attribute from the last child of
-
-   the first employee and invoke the "getNodeType()"
-
-   method.   The method should return 2.
-
-
-   * @author Curt Arnold
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-111237558
-   */
-  hc_nodeattributenodetype: function(test) {
-    var success;
-    var doc;
-    var elementList;
-    var testAddr;
-    var addrAttr;
-    var nodeType;
-
-    doc = hc_staff.hc_staff();
-    elementList = doc.getElementsByTagName("acronym");
-    testAddr = elementList.item(0);
-    addrAttr = testAddr.getAttributeNode("title");
-    nodeType = addrAttr.nodeType;
-
-    test.equal(nodeType, 2, 'nodeAttrNodeTypeAssert1');
 
     test.done();
   },
@@ -9947,57 +9766,6 @@ exports.tests = {
   /**
    *
    The "insertBefore(newChild,refChild)" method raises a
-   HIERARCHY_REQUEST_ERR DOMException if this node is of
-   a type that does not allow children of the type "newChild"
-   to be inserted.
-
-   Retrieve the root node and attempt to insert a newly
-   created Attr node.   An Element node cannot have children
-   of the "Attr" type, therefore the desired exception
-   should be raised.
-
-   * @author Curt Arnold
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-258A00AF')/constant[@name='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-952280727
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-952280727')/raises/exception[@name='DOMException']/descr/p[substring-before(.,':')='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-952280727
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=247
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=249
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=406
-   */
-  hc_nodeinsertbeforeinvalidnodetype: function(test) {
-    var success;
-    var doc;
-    var rootNode;
-    var newChild;
-    var elementList;
-    var refChild;
-    var insertedNode;
-
-    doc = hc_staff.hc_staff();
-    newChild = doc.createAttribute("title");
-    elementList = doc.getElementsByTagName("p");
-    refChild = elementList.item(1);
-    rootNode = refChild.parentNode;
-
-
-    {
-      success = false;
-      try {
-        insertedNode = rootNode.insertBefore(newChild,refChild);
-      }
-      catch(ex) {
-        success = (typeof(ex.code) != 'undefined' && ex.code == 3);
-      }
-      test.ok(success, 'throw_HIERARCHY_REQUEST_ERR');
-    }
-
-    test.done();
-  },
-
-  /**
-   *
-   The "insertBefore(newChild,refChild)" method raises a
    WRONG_DOCUMENT_ERR DOMException if the "newChild" was
    created from a different document than the one that
    created this node.
@@ -10946,57 +10714,6 @@ exports.tests = {
     childName = child.nodeName;
 
     test.equal(childName, "br", 'element nodeName');
-
-    test.done();
-  },
-
-  /**
-   *
-   The "replaceChild(newChild,oldChild)" method raises a
-   HIERARCHY_REQUEST_ERR DOMException if this node is of
-   a type that does not allow children of the type "newChild"
-   to be inserted.
-
-   Retrieve the root node and attempt to replace
-   one of its children with a newly created Attr node.
-   An Element node cannot have children of the "Attr"
-   type, therefore the desired exception should be raised.
-
-   * @author Curt Arnold
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-258A00AF')/constant[@name='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-785887307
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-785887307')/raises/exception[@name='DOMException']/descr/p[substring-before(.,':')='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-785887307
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=247
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=249
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=406
-   */
-  hc_nodereplacechildinvalidnodetype: function(test) {
-    var success;
-    var doc;
-    var rootNode;
-    var newChild;
-    var elementList;
-    var oldChild;
-    var replacedChild;
-
-    doc = hc_staff.hc_staff();
-    newChild = doc.createAttribute("lang");
-    elementList = doc.getElementsByTagName("p");
-    oldChild = elementList.item(1);
-    rootNode = oldChild.parentNode;
-
-
-    {
-      success = false;
-      try {
-        replacedChild = rootNode.replaceChild(newChild,oldChild);
-      }
-      catch(ex) {
-        success = (typeof(ex.code) != 'undefined' && ex.code == 3);
-      }
-      test.ok(success, 'throw_HIERARCHY_REQUEST_ERR');
-    }
 
     test.done();
   },
@@ -12098,7 +11815,6 @@ exports.tests = {
     attributes = testEmployee.attributes;
 
     streetAttr = attributes.getNamedItem("street");
-    test.equal(streetAttr.nodeType, 2, 'typeAssert');
     attrName = streetAttr.name;
 
     test.equal(attrName, "street", 'nodeName');
@@ -12568,52 +12284,6 @@ exports.tests = {
     childName = appendNode.nodeName;
 
     test.equal(childName, "newChild", 'nodeAppendChildGetNodeNameAssert1');
-
-    test.done();
-  },
-
-  /**
-   *
-   The "appendChild(newChild)" method raises a
-   HIERARCHY_REQUEST_ERR DOMException if this node is of
-   a type that does not allow children of the type "newChild"
-   to be inserted.
-
-   Retrieve the root node and attempt to append a newly
-   created Attr node.   An Element node cannot have children
-   of the "Attr" type, therefore the desired exception
-   should be raised.
-
-   * @author NIST
-   * @author Mary Brady
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-258A00AF')/constant[@name='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-184E7107
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#xpointer(id('ID-184E7107')/raises/exception[@name='DOMException']/descr/p[substring-before(.,':')='HIERARCHY_REQUEST_ERR'])
-   * @see http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core#ID-184E7107
-   * @see http://www.w3.org/Bugs/Public/show_bug.cgi?id=249
-   */
-  nodeappendchildinvalidnodetype: function(test) {
-    var success;
-    var doc;
-    var rootNode;
-    var newChild;
-    var appendedChild;
-
-    doc = staff.staff();
-    rootNode = doc.documentElement;
-
-    newChild = doc.createAttribute("newAttribute");
-
-    {
-      success = false;
-      try {
-        appendedChild = rootNode.appendChild(newChild);
-      }
-      catch(ex) {
-        success = (typeof(ex.code) != 'undefined' && ex.code == 3);
-      }
-      test.ok(success, 'throw_HIERARCHY_REQUEST_ERR');
-    }
 
     test.done();
   },
